@@ -1,18 +1,67 @@
-var obstacle, target, population
+const GAME_IDLE = 'IDLE'
+const GAME_RUNNING = 'RUNNING'
+const GAME_PAUSED = 'PAUSED'
+var target, population
 var obstacles = []
-var popSize = 30
-var lifespan = 300
-var maxforce = 0.5
+
+const general = {
+  frameRate: 60,
+  maxForce: 0.5,
+  lifeSpan: 400,
+  popSize: 20,
+  mutation: true,
+  crossover: true,
+}
+const fitness = {}
+
+const gameStatus = {
+  status: GAME_IDLE,
+}
 var stopCount = 0
 var count = 0
 var totalMutation = 0
 var totalCompleted = 0
-var pops = 1
+var pops = 0
 var p
+let timerActive = false
 let time = 0
+let timer = setInterval(function() {
+  if (timerActive) {
+    time++
+  }
+}, 1000)
 
-const gameStatus = {
-  status: '',
+function setGenerals(vals) {
+  general.mutation = vals.mutation == 'on' ? true : false
+  general.crossover = vals.crossover == 'on' ? true : false
+  general.frameRate = parseInt(vals.frameInput)
+  general.popSize = parseInt(vals.popInput)
+  general.lifeSpan = parseInt(vals.lifeInput)
+  general.maxForce = parseFloat(vals.forceInput)
+}
+
+function startGame() {
+  if (gameStatus.status == GAME_IDLE || gameStatus.status == GAME_PAUSED) {
+    gameStatus.status = GAME_RUNNING
+    timerActive = true
+    if (gameStatus.status == GAME_IDLE) {
+      setup()
+      pops = 1
+    }
+  }
+}
+function pauseGame() {
+  if (gameStatus.status == GAME_RUNNING) {
+    gameStatus.status = GAME_PAUSED
+    timerActive = false
+  }
+}
+function resetGame() {
+  gameStatus.status = GAME_IDLE
+  setup()
+  time = 0
+  pops = 1
+  timerActive = false
 }
 
 function frameListener() {
@@ -39,6 +88,32 @@ $(document).ready(function() {
   forceListener()
   frameListener()
 
+  $('#variable-form').on('submit', function(e) {
+    // Get all the forms elements and their values in one step
+    e.preventDefault()
+    var values = {}
+    $('#variable-form')
+      .serializeArray()
+      .forEach(el => {
+        values[el.name] = el.value
+      })
+    //setGenerals(values)
+  })
+  $('#fitness-form').on('submit', function(e) {
+    // Get all the forms elements and their values in one step
+    e.preventDefault()
+    var values = {}
+    $('#fitness-form')
+      .serializeArray()
+      .forEach(el => {
+        values[el.name] = el.value
+      })
+    //setGenerals(values)
+  })
+  $('button#start-game').click(startGame)
+  $('button#pause-game').click(pauseGame)
+  $('button#reset-game').click(resetGame)
+
   $('#frameInput').on('input', function() {
     $('#frameInput').trigger('change')
   })
@@ -59,8 +134,9 @@ $(document).ready(function() {
 })
 
 function showSummary() {
+  $('#status-label-value').text(gameStatus.status)
   $('#generation-label-value').text(pops)
-  $('#all-population-label-value').text(pops * popSize)
+  $('#all-population-label-value').text(pops * general.popSize)
   $('#total-mutation-label-value').text(totalMutation)
   // $('#total-completed-label-value').text(
   //   totalCompleted + '(' + (totalCompleted / (pops * popSize)) * 100 + '%)',
@@ -79,10 +155,16 @@ function showSummary() {
 // }
 
 function createObstacles() {
-  obstacles.push(new Obstacle(400, 250, 160))
-  obstacles.push(new Obstacle(200, 350, 120))
-  obstacles.push(new Obstacle(600, 350, 120))
-  obstacles.push(new Obstacle(600, 150, 120))
+  obstacles.push(new Obstacle(190, 350, 140))
+
+  obstacles.push(new Obstacle(0, 250, 200))
+  obstacles.push(new Obstacle(380, 250, 200))
+
+  obstacles.push(new Obstacle(0, 450, 160))
+  obstacles.push(new Obstacle(380, 450, 160))
+
+  obstacles.push(new Obstacle(95, 100, 80))
+  obstacles.push(new Obstacle(285, 100, 80))
 }
 
 function hitAny(point) {
@@ -103,14 +185,14 @@ function setup() {
   createObstacles()
   target = new Target(64)
   p = createP()
-  var timer = setInterval(function() {
-    time++
-  }, 1000)
 }
 
 function draw() {
   background(45, 40, 62)
-  population.run()
+  if (gameStatus.status === GAME_RUNNING) {
+    population.run()
+    count++
+  }
   target.show()
   obstacles.forEach(obs => obs.show())
   // last3gentrails.forEach((trailgen, ind) => {
@@ -123,8 +205,8 @@ function draw() {
   //   });
   // })
   showSummary()
-  count++
-  if (count == lifespan) {
+
+  if (count == general.lifeSpan) {
     population.evaluate()
     population.selection()
     count = 0
@@ -225,19 +307,20 @@ function Population() {
   this.rockets = []
   this.matingpool = []
 
-  for (var a = 0; a < popSize; a++) this.rockets[a] = new Rocket()
+  for (var a = 0; a < general.popSize; a++) this.rockets[a] = new Rocket()
 
   this.evaluate = function() {
     var maxfit = 0
-    for (var i = 0; i < popSize; i++) {
+    for (var i = 0; i < this.rockets.length; i++) {
       this.rockets[i].calcFitness()
       if (this.rockets[i].fitness > maxfit) maxfit = this.rockets[i].fitness
     }
 
-    for (var i = 0; i < popSize; i++) this.rockets[i].fitness /= maxfit
+    for (var i = 0; i < this.rockets.length; i++)
+      this.rockets[i].fitness /= maxfit
 
     this.matingpool = []
-    for (var i = 0; i < popSize; i++) {
+    for (var i = 0; i < this.rockets.length; i++) {
       var n = this.rockets[i].fitness * 100
       for (var j = 0; j < n; j++) this.matingpool.push(this.rockets[i])
     }
@@ -268,9 +351,20 @@ function Population() {
   }
 
   this.run = function() {
-    for (var a = 0; a < popSize; a++) {
-      this.rockets[a].update()
-      this.rockets[a].show()
+    if (general.popSize <= this.rockets.length) {
+      for (var a = 0; a < general.popSize; a++) {
+        this.rockets[a].update()
+        this.rockets[a].show()
+      }
+    } else {
+      for (var a = 0; a < this.rockets.length; a++) {
+        this.rockets[a].update()
+        this.rockets[a].show()
+      }
+      let diff = general.popSize - this.rockets.length
+      for (let x = 0; x < diff; x++) {
+        this.rockets.push(new Rocket())
+      }
     }
   }
 }
@@ -297,8 +391,7 @@ function Obstacle(x, y, size) {
   }
 
   this.show = function() {
-    noStroke()
-    fill(0, 0, 0)
+    fill(176, 38, 255)
     triangle(
       this.x,
       this.y,
@@ -346,9 +439,9 @@ function DNA(genes) {
   } else {
     this.genes = []
 
-    for (var i = 0; i < lifespan; i++) {
+    for (var i = 0; i < general.lifeSpan; i++) {
       this.genes[i] = p5.Vector.random2D()
-      this.genes[i].setMag(maxforce)
+      this.genes[i].setMag(general.maxForce)
     }
   }
 
@@ -371,7 +464,7 @@ function DNA(genes) {
       if (random(1) < 0.001) {
         totalMutation++
         this.genes[i] = p5.Vector.random2D()
-        this.genes[i].setMag(maxforce)
+        this.genes[i].setMag(general.maxForce)
       }
     }
   }

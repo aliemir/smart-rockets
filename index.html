@@ -36,17 +36,35 @@
       <div class="card card-sm">
         <h3>Controls</h3>
         <div class="card-content card-form">
-          <button class="pure-button button-success pure-u-1 game-button">
+          <button
+            id="start-game"
+            class="pure-button button-success pure-u-1 game-button"
+          >
             Start
           </button>
-          <button class="pure-button button-warning pure-u-1 game-button">
+          <button
+            id="pause-game"
+            class="pure-button button-warning pure-u-1 game-button"
+          >
             Pause
           </button>
-          <button class="pure-button button-error pure-u-1 game-button">
+          <button
+            disabled
+            id="reset-game"
+            class="pure-button button-error pure-u-1 game-button"
+          >
             Reset
           </button>
           <h3>Summary</h3>
           <div class="card-content card-form">
+            <div class="pure-u-1 flex">
+              <div class="pure-u-1-2">
+                Status :
+              </div>
+              <div class="pure-u-1-2">
+                <strong><span id="status-label-value"></span></strong>
+              </div>
+            </div>
             <div class="pure-u-1 flex">
               <div class="pure-u-1-2">
                 Generation :
@@ -85,17 +103,22 @@
       <div class="card card-sm">
         <h3>General Variables</h3>
         <div class="card-content card-form">
-          <form class="pure-form pure-form-stacked">
+          <form
+            name="variable-form"
+            id="variable-form"
+            class="pure-form pure-form-stacked"
+          >
             <label for="popInput"
               >Population ( <span id="popInput-value"></span> )</label
             >
             <input
               class="pure-input-1"
               id="popInput"
+              name="popInput"
               type="range"
               min="1"
               max="300"
-              value="100"
+              value="30"
             />
             <label for="lifeInput"
               >Lifetime ( <span id="lifeInput-value"></span> )</label
@@ -103,6 +126,7 @@
             <input
               class="pure-input-1"
               id="lifeInput"
+              name="lifeInput"
               type="range"
               min="200"
               max="1000"
@@ -114,6 +138,7 @@
             <input
               class="pure-input-1"
               id="forceInput"
+              name="forceInput"
               type="range"
               min="0.1"
               step="0.1"
@@ -126,22 +151,33 @@
             <input
               class="pure-input-1"
               id="frameInput"
+              name="frameInput"
               type="range"
               min="5"
               max="240"
               value="60"
             />
             <div class="pure-u-1-3">
-              <label for="remember" class="pure-checkbox">
-                <input id="remember" type="checkbox" /> Mutation
+              <label for="mutation" class="pure-checkbox">
+                <input id="mutation" name="mutation" checked type="checkbox" />
+                Mutation
               </label>
             </div>
             <div class="pure-u-1-3">
-              <label for="remember" class="pure-checkbox">
-                <input id="remember" type="checkbox" /> Crossover
+              <label for="crossover" class="pure-checkbox">
+                <input
+                  id="crossover"
+                  name="crossover"
+                  checked
+                  type="checkbox"
+                />
+                Crossover
               </label>
             </div>
-            <button class="pure-button pure-button-success pure-u-1">
+            <button
+              type="submit"
+              class="pure-button pure-button-success pure-u-1"
+            >
               Apply Changes
             </button>
           </form>
@@ -150,14 +186,19 @@
       <div class="card card-sm">
         <h3>Fitness Calculation</h3>
         <div class="card-content card-form">
-          <form class="pure-form pure-form-stacked">
-            <label for="popInput"
+          <form
+            name="fitness-form"
+            id="fitness-form"
+            class="pure-form pure-form-stacked"
+          >
+            <label for="compMultInput"
               >Completion Multiplier ( x<span id="popInput-value"></span>
               )</label
             >
             <input
               class="pure-input-1"
-              id="popInput"
+              name="compMultInput"
+              id="compMultInput"
               type="range"
               min="1"
               max="300"
@@ -168,11 +209,13 @@
             >
             <input
               class="pure-input-1"
-              id="lifeInput"
+              id="crashMultImput"
+              name="crashMultImput"
               type="range"
-              min="1"
-              max="1000"
-              value="300"
+              min="0"
+              step="0.1"
+              max="1"
+              value="0.3"
             />
             <label for="forceInput"
               >Proximity Multiplier ( x<span id="forceInput-value"></span>
@@ -180,12 +223,13 @@
             >
             <input
               class="pure-input-1"
-              id="forceInput"
+              id="proxMultInput"
+              name="proxMultInput"
               type="range"
-              min="0.1"
-              step="0.1"
-              max="2"
-              value="0.5"
+              min="1"
+              step="1"
+              max="100"
+              value="2"
             />
             <label for="frameInput"
               >Mutation Probability ( %<span id="frameInput-value"></span>
@@ -193,14 +237,18 @@
             >
             <input
               class="pure-input-1"
-              id="frameInput"
+              id="mutProbInput"
+              name="mutProbInput"
               type="range"
               step="0.1"
               min="0.1"
               max="100"
               value="0.1"
             />
-            <button class="pure-button pure-button-success pure-u-1">
+            <button
+              type="submit"
+              class="pure-button pure-button-success pure-u-1"
+            >
               Apply Changes
             </button>
           </form>
