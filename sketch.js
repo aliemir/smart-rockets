@@ -165,10 +165,10 @@ $(document).ready(function() {
     $('#mutProbInput').trigger('change')
   })
 
-  $('#compMultInput').change(frameListener)
-  $('#crashMultImput').change(popListener)
-  $('#proxMultInput').change(lifeListener)
-  $('#mutProbInput').change(forceListener)
+  $('#compMultInput').change(completeListener)
+  $('#crashMultImput').change(crashListener)
+  $('#proxMultInput').change(proximityListener)
+  $('#mutProbInput').change(mutationListener)
 
   $('#frameInput').change(frameListener)
   $('#popInput').change(popListener)
