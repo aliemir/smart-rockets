@@ -5,11 +5,11 @@ var target, population
 var obstacles = []
 
 const general = {
-  frameRate: 60,
-  maxForce: 0.5,
-  lifeSpan: 400,
-  popSize: 20,
-  mutation: true,
+  frameRate: 60, //done
+  maxForce: 0.5, //done
+  lifeSpan: 400, //done
+  popSize: 20, //done
+  mutation: true, //done
   crossover: true
 }
 const fitness = {
@@ -223,7 +223,7 @@ function hitAny(point) {
 function setup() {
   var canvas = createCanvas(380, 800)
   canvas.parent('p5-canvas-wrapper')
-  frameRate(60)
+  frameRate(general.frameRate)
   population = new Population()
   createObstacles()
   target = new Target(64)
@@ -379,7 +379,9 @@ function Population() {
       } else {
         var child = parentB.dna.crossover(parentA.dna)
       }
-      child.mutation()
+      if (general.mutation) {
+        child.mutation()
+      }
       newRockets[i] = new Rocket(child)
     }
     //addToTrails(this.rockets);
@@ -489,6 +491,9 @@ function DNA(genes) {
   }
 
   this.crossover = function(partner) {
+    if (!general.crossover) {
+      return new DNA(this.genes)
+    }
     var newgenes = []
     var mid = floor(random(this.genes.length / 2))
     for (var i = 0; i < this.genes.length; i++) {
