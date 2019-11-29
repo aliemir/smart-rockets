@@ -370,6 +370,7 @@ function Population() {
   }
 
   this.selection = function() {
+    console.log(this.rockets.length)
     var newRockets = []
     for (var i = 0; i < this.rockets.length; i++) {
       var parentA = random(this.matingpool)
