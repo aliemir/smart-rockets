@@ -61,9 +61,10 @@ $(document).ready(function() {
 function showSummary() {
   $('#generation-label-value').text(pops)
   $('#all-population-label-value').text(pops * popSize)
-  $('#total-completed-label-value').text(
-    totalCompleted + '(' + (totalCompleted / (pops * popSize)) * 100 + '%)',
-  )
+  $('#total-mutation-label-value').text(totalMutation)
+  // $('#total-completed-label-value').text(
+  //   totalCompleted + '(' + (totalCompleted / (pops * popSize)) * 100 + '%)',
+  // )
   $('#total-time-label-value').text(time)
 }
 
