@@ -94,11 +94,11 @@ function crashListener() {
   const val = $('#crashMultImput').val()
   $('#crashMultImput-value').text(val)
 }
-function crashListener() {
+function proximityListener() {
   const val = $('#proxMultInput').val()
   $('#proxMultInput-value').text(val)
 }
-function crashListener() {
+function mutationListener() {
   const val = $('#mutProbInput').val()
   $('#mutProbInput-value').text(val)
 }
@@ -108,6 +108,10 @@ $(document).ready(function() {
   lifeListener()
   forceListener()
   frameListener()
+  completeListener()
+  crashListener()
+  proximityListener()
+  mutationListener()
 
   $('#variable-form').on('submit', function(e) {
     // Get all the forms elements and their values in one step
@@ -148,6 +152,23 @@ $(document).ready(function() {
   $('#forceInput').on('input', function() {
     $('#forceInput').trigger('change')
   })
+  $('#compMultInput').on('input', function() {
+    $('#compMultInput').trigger('change')
+  })
+  $('#crashMultImput').on('input', function() {
+    $('#crashMultImput').trigger('change')
+  })
+  $('#proxMultInput').on('input', function() {
+    $('#proxMultInput').trigger('change')
+  })
+  $('#mutProbInput').on('input', function() {
+    $('#mutProbInput').trigger('change')
+  })
+
+  $('#compMultInput').change(frameListener)
+  $('#crashMultImput').change(popListener)
+  $('#proxMultInput').change(lifeListener)
+  $('#mutProbInput').change(forceListener)
 
   $('#frameInput').change(frameListener)
   $('#popInput').change(popListener)
