@@ -10,12 +10,17 @@ const general = {
   lifeSpan: 400,
   popSize: 20,
   mutation: true,
-  crossover: true,
+  crossover: true
 }
-const fitness = {}
+const fitness = {
+  completion: 100,
+  crash: 0.3,
+  proximity: 1,
+  mutation: 0.001
+}
 
 const gameStatus = {
-  status: GAME_IDLE,
+  status: GAME_IDLE
 }
 var stopCount = 0
 var count = 0
@@ -81,6 +86,22 @@ function forceListener() {
   const val = $('#forceInput').val()
   $('#forceInput-value').text(val)
 }
+function completeListener() {
+  const val = $('#compMultInput').val()
+  $('#compMultInput-value').text(val)
+}
+function crashListener() {
+  const val = $('#crashMultImput').val()
+  $('#crashMultImput-value').text(val)
+}
+function crashListener() {
+  const val = $('#proxMultInput').val()
+  $('#proxMultInput-value').text(val)
+}
+function crashListener() {
+  const val = $('#mutProbInput').val()
+  $('#mutProbInput-value').text(val)
+}
 
 $(document).ready(function() {
   popListener()
@@ -110,6 +131,7 @@ $(document).ready(function() {
       })
     //setGenerals(values)
   })
+
   $('button#start-game').click(startGame)
   $('button#pause-game').click(pauseGame)
   $('button#reset-game').click(resetGame)
@@ -288,7 +310,7 @@ function Rocket(dna) {
         this.history[i].x,
         this.history[i].y,
         this.history[i - 1].x,
-        this.history[i - 1].y,
+        this.history[i - 1].y
       )
     }
     push()
@@ -384,7 +406,7 @@ function Obstacle(x, y, size) {
         this.x + this.size,
         this.y,
         this.x + this.size / 2,
-        this.y + this.size,
+        this.y + this.size
       )
     )
       return true
@@ -398,7 +420,7 @@ function Obstacle(x, y, size) {
       this.x + this.size,
       this.y,
       this.x + this.size / 2,
-      this.y + this.size,
+      this.y + this.size
     )
     //rect(this.x, this.y, this.w, this.h)
   }
