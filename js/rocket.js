@@ -23,7 +23,7 @@ function Rocket(dna) {
 
   this.outOfBounds = function() {
     return (
-      this.position.x < 0 || this.position.x > WIDTH || this.position.y > height
+      this.position.x < 0 || this.position.x > WIDTH || this.position.y > HEIGHT
     )
   }
 
@@ -34,7 +34,9 @@ function Rocket(dna) {
 
   this.calculateFitness = function() {
     let d = dist(this.position.x, this.position.y, target.x, target.y)
-    this.fitness = map(d, 0, width, width, 0)
+    this.fitness = map(d, 0, HEIGHT, HEIGHT, 0, true)
+    console.log(d)
+    console.log(this.fitness)
     if (this.completed) this.fitness *= fitness.completed
     if (this.crashed) this.fitness *= fitness.crash
   }

@@ -25,7 +25,10 @@ function Population(id) {
     console.log(this.rockets)
     for (let i = 0; i < this.rockets.length; i++) {
       const span = this.rockets[i].fitness * 100
-      for (let i = 0; i < span; i++) this.matingPool.push(this.rockets[i])
+      console.log(span)
+      for (let i = 0; i < span; i++) {
+        this.matingPool.push(this.rockets[i])
+      }
     }
   }
 
