@@ -1,10 +1,10 @@
 function Target(r) {
   this.r = r
-  this.x = width / 2
-  this.y = height / 4
+  this.x = TARGET_X
+  this.y = TARGET_Y
 
   this.hit = function(input) {
-    var d = dist(input.x, input.y, this.x, this.y)
+    let d = dist(input.x, input.y, this.x, this.y)
     if (d < this.r / 2) return true
   }
 

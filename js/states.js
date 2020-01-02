@@ -1,3 +1,0 @@
-const GAME_IDLE = 'IDLE'
-const GAME_RUNNING = 'RUNNING'
-const GAME_PAUSED = 'PAUSED'

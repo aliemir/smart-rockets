@@ -13,15 +13,18 @@ h1 {
   text-align: center;
   color: #564f6f;
   text-shadow: -1px 1px 0 #802bb1;
+  margin-bottom: 3px;
+}
+
+h4 {
+  margin: 0;
+  text-align: center;
+  color: #564f6f;
+  text-shadow: -1px 1px 0 #802bb1;
 }
 
 .container {
-  justify-content: center;
-  margin-top: 20px;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, 388px);
-  grid-auto-rows: 416px;
+  text-align: center;
 }
 
 .canvas-wrapper {

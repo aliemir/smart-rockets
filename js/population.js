@@ -1,73 +1,59 @@
-function Population(id) {
-  this.id = id
+function Population() {
   this.rockets = []
   this.matingPool = []
-  ;(this.successCount = 0), (this.failed = true)
 
-  for (let i = 0; i < general.popSize; i++) {
+  for (let i = 0; i < POPULATION_SIZE; i++) {
     this.rockets[i] = new Rocket()
   }
 
   this.evaluate = function() {
-    for (let i = 0; i < this.rockets.length; i++) {
+    let maxfit = 0
+    // Iterate through all rockets and calcultes their fitness
+    for (let i = 0; i < POPULATION_SIZE; i++) {
+      // Calculates fitness
       this.rockets[i].calculateFitness()
+      // If current fitness is greater than max, then make max equal to current
+      if (this.rockets[i].fitness > maxfit) {
+        maxfit = this.rockets[i].fitness
+      }
     }
-    const maxFitness = this.rockets.reduce(
-      (total, curr) => total + curr.fitness,
-      0,
-    )
-    this.rockets.map(rocket => ({
-      ...rocket,
-      fitness: rocket.fitness / maxFitness,
-    }))
+    // Normalises fitnesses
+    for (var i = 0; i < POPULATION_SIZE; i++) {
+      this.rockets[i].fitness /= maxfit
+    }
 
     this.matingPool = []
-    console.log(this.rockets)
-    for (let i = 0; i < this.rockets.length; i++) {
-      const span = this.rockets[i].fitness * 100
-      for (let i = 0; i < span; i++) this.matingPool.push(this.rockets[i])
+    // Take rockets fitness make in to scale of 1 to 100
+    // A rocket with high fitness will highly likely will be in the mating pool
+    for (var i = 0; i < POPULATION_SIZE; i++) {
+      var n = this.rockets[i].fitness * 100
+      for (var j = 0; j < n; j++) {
+        this.matingPool.push(this.rockets[i])
+      }
     }
   }
 
   this.selection = function() {
-    const newRockets = []
-    for (let i = 0; i < this.rockets.length; i++) {
-      let child
-      if (general.crossover) {
-        console.log(this.matingPool)
-        const pA = random(this.matingPool)
-        const pB = random(this.matingPool)
-        if (pA.fitness >= pB.fitness) {
-          child = pA.dna.crossover(pB.dna)
-        } else {
-          child = pA.dna.crossover(pB.dna)
-        }
-      } else {
-        child = this.rockets[i]
-      }
-
-      if (general.mutation) {
-        child.mutation()
-      }
-
+    var newRockets = []
+    for (var i = 0; i < POPULATION_SIZE; i++) {
+      // Picks random dna
+      var parentA = random(this.matingPool).dna
+      var parentB = random(this.matingPool).dna
+      // Creates child by using crossover function
+      var child = parentA.crossover(parentB)
+      child.mutation()
+      // Creates new rocket with child dna
       newRockets[i] = new Rocket(child)
     }
+    // This instance of rockets are the new rockets
     this.rockets = newRockets
   }
 
-  this.failed = function() {
-    for (let i = 0; i < this.rockets.length; i++) {
-      if (!this.rockets[i].crashed) return false
-      return true
-    }
-  }
-
   this.run = function() {
-    if (this.id === game.id) {
-      for (let i = 0; i < this.rockets.length; i++) {
-        this.rockets[i].update()
-        this.rockets[i].show()
-      }
+    for (var i = 0; i < POPULATION_SIZE; i++) {
+      this.rockets[i].update()
+      // Displays rockets to screen
+      this.rockets[i].show()
     }
   }
 }
