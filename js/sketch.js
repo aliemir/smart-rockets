@@ -1,35 +1,39 @@
-let p
-let target, population
-let obstacles = []
-let general = new generalVariables()
-let fitness = new fitnessVariables()
-let game = new gameVariables(GAME_IDLE, Date.now())
+var p, target, population, obstacles
+var moment = 0
+var generation = 0
+
+function showGeneration() {
+  let sp = document.querySelector('#generation_span')
+  if (sp) {
+    sp.innerHTML = generation + 1
+  }
+}
 
 function setup() {
-  console.log('x')
-  var canvas = createCanvas(WIDTH, HEIGHT)
+  console.log('setup')
+  let canvas = createCanvas(FIELD_WIDTH, FIELD_HEIGHT)
   canvas.parent('p5-canvas-wrapper')
-  frameRate(general.frameRate)
-  population = new Population(game.id)
+  frameRate(FRAME_RATE)
+  population = new Population()
   target = new Target(64)
-  createObstacles()
+  obstacles = new Obstacles()
   p = createP()
+  showGeneration()
 }
 
 function draw() {
   background(45, 40, 62)
-  if (game.state === GAME_RUNNING) {
-    population.run()
-    game.moment++
-  }
-  target.show()
-  obstacles.forEach(obs => obs.show())
-  showSummary()
+  population.run()
 
-  if (game.moment == general.lifeSpan) {
+  moment++
+  if (moment == LIFE_SPAN) {
     population.evaluate()
     population.selection()
-    game.moment = 0
-    game.generation++
+    moment = 0
+    generation++
+    showGeneration()
   }
+
+  target.show()
+  obstacles.run()
 }
