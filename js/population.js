@@ -42,17 +42,28 @@ function Population() {
     }
   }
 
+  this.getRaces = function() {
+    raceArr = this.rockets.map(r => {
+      return r.color
+    })
+    return raceArr
+  }
+
   this.selection = function() {
     var newRockets = []
     for (var i = 0; i < POPULATION_SIZE; i++) {
       // Picks random dna
-      var parentA = random(this.matingPool).dna
-      var parentB = random(this.matingPool).dna
+      let pA = random(this.matingPool)
+      let pB = random(this.matingPool)
+      var parentA = pA.dna
+      var parentB = pB.dna
       // Creates child by using crossover function
+      let race = pA.fitness > pB.fitness ? pA.color : pB.color
+      let raceMut = random(0, 100) < 8 ? true : false
       var child = parentA.crossover(parentB)
       child.mutation()
       // Creates new rocket with child dna
-      newRockets[i] = new Rocket(child)
+      newRockets[i] = new Rocket(child, raceMut ? random(COLORS) : race)
     }
     // This instance of rockets are the new rockets
     this.rockets = newRockets

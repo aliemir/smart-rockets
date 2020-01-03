@@ -1,8 +1,9 @@
-function Rocket(dna) {
+function Rocket(dna, color) {
   this.position = createVector(INITIAL_POSITION_X, INITIAL_POSITION_Y)
   this.velocity = createVector()
   this.acceleration = createVector()
-  this.color = { r: random(255), g: random(255), b: random(255) }
+
+  this.color = color ? color : random(COLORS)
   this.dna = dna ? dna : new DNA()
   this.completed = false
   this.crashed = false
@@ -50,7 +51,7 @@ function Rocket(dna) {
     translate(this.position.x, this.position.y)
     rotate(this.velocity.heading())
     rotate(PI / 2)
-    fill(this.color.r, this.color.g, this.color.b, 255)
+    fill(this.color)
     triangle(0, -10, -7, 10, 7, 10)
     ellipse(0, 10, 5, 5)
     pop()

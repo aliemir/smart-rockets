@@ -6,6 +6,7 @@ var bestFit = '0'
 var bestFitArr = [0]
 var compPercent = ''
 var compPercentArr = [0]
+var raceArr = []
 
 function showGeneration() {
   let sp = document.querySelector('#generation_span')
@@ -34,7 +35,6 @@ function genfitChart() {
   for (let i = 0; i < bestFitArr.length; i++) {
     labArr.push('' + i)
   }
-  console.log(labArr)
   var myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -99,6 +99,75 @@ function compPercentChart() {
   })
 }
 
+function raceColorChart() {
+  var ctx = document.getElementById('raceColor').getContext('2d')
+
+  raceLabels = []
+  raceCounts = []
+
+  function calculate(arr) {
+    var a = [],
+      b = [],
+      prev
+
+    arr.sort()
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] !== prev) {
+        a.push(arr[i])
+        b.push(1)
+      } else {
+        b[b.length - 1]++
+      }
+      prev = arr[i]
+    }
+
+    raceLabels = a
+    raceCounts = b
+  }
+  calculate(raceArr)
+
+  raceNames = raceLabels.map(l => {
+    let n = COLORS.findIndex(e => e === l)
+    return 'R' + n
+  })
+
+  var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: raceNames,
+      datasets: [
+        {
+          label: raceCounts,
+          data: raceCounts,
+          backgroundColor: raceLabels,
+          borderColor: raceLabels,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: false,
+      title: {
+        display: true,
+        text: 'Color Populations in Generation',
+        position: 'top',
+        fontSize: 12,
+        fontColor: '#676767',
+        padding: 10,
+      },
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          boxWidth: 20,
+          fontColor: '#111',
+          padding: 15,
+        },
+      },
+    },
+  })
+}
+
 function setup() {
   console.log('setup')
   let canvas = createCanvas(FIELD_WIDTH, FIELD_HEIGHT)
@@ -108,10 +177,12 @@ function setup() {
   target = new Target(64)
   obstacles = new Obstacles()
   p = createP()
+  population.getRaces()
   showGeneration()
   showBestFit()
   genfitChart()
   compPercentChart()
+  raceColorChart()
 }
 
 function draw() {
@@ -128,6 +199,7 @@ function draw() {
     showBestFit()
     genfitChart()
     compPercentChart()
+    raceColorChart()
   }
 
   target.show()
