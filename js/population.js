@@ -59,7 +59,7 @@ function Population() {
       var parentB = pB.dna
       // Creates child by using crossover function
       let race = pA.fitness > pB.fitness ? pA.color : pB.color
-      let raceMut = random(0, 100) < 8 ? true : false
+      let raceMut = random(0, 100) < RACE_MUTATION_PROBABILITY ? true : false
       var child = parentA.crossover(parentB)
       child.mutation()
       // Creates new rocket with child dna
