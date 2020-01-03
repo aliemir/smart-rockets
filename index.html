@@ -16,6 +16,12 @@
       integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47"
       crossorigin="anonymous"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="libs/jquery-3.4.1.min.js"></script>
     <script src="libs/p5.js"></script>
     <script src="libs/p5.sound.js"></script>
@@ -34,12 +40,21 @@
   <body>
     <h1>Smart Rockets with Genetic Algorithm</h1>
     <h4>
-      Generation <strong><span id="generation_span"></span></strong>
+      <span
+        >Generation <strong><span id="generation_span"></span></strong></span
+      >&nbsp;&nbsp;&nbsp;<span
+        >Current Max Fitness <strong><span id="bestfit_span"></span></strong
+      ></span>
     </h4>
     <div class="container">
       <div class="card-content canvas-container" id="p5-canvas-wrapper">
         <!-- Canvas Here -->
       </div>
+    </div>
+    <h3>Charts and Stats</h3>
+    <div class="charts">
+      <canvas id="genFits" width="400" height="320"></canvas>
+      <canvas id="compPercent" width="400" height="320"></canvas>
     </div>
   </body>
 </html>

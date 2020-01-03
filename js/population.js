@@ -22,6 +22,15 @@ function Population() {
       this.rockets[i].fitness /= maxfit
     }
 
+    bestFit = maxfit.toFixed(2)
+    bestFitArr.push(maxfit.toFixed(2))
+    let compCount = 0
+    for (let c = 0; c < POPULATION_SIZE; c++) {
+      if (this.rockets[c].completed) compCount++
+    }
+    compPercent = (compCount / POPULATION_SIZE) * 100
+    compPercentArr.push(compPercent)
+
     this.matingPool = []
     // Take rockets fitness make in to scale of 1 to 100
     // A rocket with high fitness will highly likely will be in the mating pool
