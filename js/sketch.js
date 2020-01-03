@@ -137,7 +137,7 @@ function raceColorChart() {
       labels: raceNames,
       datasets: [
         {
-          label: raceCounts,
+          label: raceNames,
           data: raceCounts,
           backgroundColor: raceLabels,
           borderColor: raceLabels,
@@ -195,6 +195,7 @@ function draw() {
     population.selection()
     moment = 0
     generation++
+    population.getRaces()
     showGeneration()
     showBestFit()
     genfitChart()
